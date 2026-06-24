@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-brand-yellow: #FFC400;
+  --color-bg-luxury-bg: #050505;
+  --color-bg-luxury-surface: #0B0B0B;
+  --color-bg-luxury-elevated: #111111;
+  --color-border-luxury: rgba(255, 255, 255, 0.08);
+  --color-text-luxury-primary: #FFFFFF;
+  --color-text-luxury-secondary: #A1A1AA;
+}
+
+/* Custom global styles for dark luxury experience */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: #050505;
+}
+
+body {
+  background-color: #050505;
+  color: #FFFFFF;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Subtle custom scrollbar matching dark luxury */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-yellow);
+}
+
+/* Subtle animated grain overlay */
+@keyframes grainAnimation {
+  0%, 100% { transform:translate(0, 0) }
+  10% { transform:translate(-5%, -10%) }
+  20% { transform:translate(-15%, 5%) }
+  30% { transform:translate(7%, -25%) }
+  40% { transform:translate(-5%, 25%) }
+  50% { transform:translate(-15%, 10%) }
+  60% { transform:translate(15%, 0%) }
+  70% { transform:translate(0%, 15%) }
+  80% { transform:translate(3%, 35%) }
+  90% { transform:translate(-10%, 10%) }
+}
+
+.noise-overlay {
+  position: fixed;
+  top: -150%;
+  left: -150%;
+  right: -150%;
+  bottom: -150%;
+  width: 400%;
+  height: 400%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  animation: grainAnimation 8s steps(10) infinite;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Custom animation for checking checkmark SVG */
+@keyframes checkdraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.draw-checkmark {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkdraw 0.8s ease-out forwards;
+}
+
+/* Glow Sweep effect on WhatsApp CTA button */
+@keyframes shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shine {
+  animation: shine 1.6s infinite;
+}
+
+/* Luxury Card reflection border effect */
+.luxury-border-glow {
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.luxury-border-glow:hover {
+  border-color: rgba(255, 196, 0, 0.45);
+  box-shadow: 0 0 20px rgba(255, 196, 0, 0.12);
+}
+

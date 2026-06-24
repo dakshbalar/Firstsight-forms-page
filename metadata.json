@@ -1,0 +1,6 @@
+{
+  "name": "First AI Landing Page",
+  "description": "Premium, high-converting multi-step lead capture landing page for First AI programs with interactive validation, admin dashboard, and integration-ready configurations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
