@@ -1,6 +1,6 @@
 {
-  "name": "First AI Landing Page",
-  "description": "Premium, high-converting multi-step lead capture landing page for First AI programs with interactive validation, admin dashboard, and integration-ready configurations.",
+  "name": "FirstSight B2B Portal",
+  "description": "Premium, high-converting B2B lead capture and partnership inquiry portal for FirstSight, an end-to-end e-commerce growth partner with integrated Google Sheets sync and admin tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

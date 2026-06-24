@@ -4,37 +4,33 @@
  */
 
 export type Occupation =
-  | 'student'
-  | 'working_professional'
-  | 'freelancer'
-  | 'business_owner'
-  | 'marketing_professional'
-  | 'designer'
-  | 'developer'
-  | 'ai_enthusiast'
-  | 'content_creator'
-  | 'sales_professional'
-  | 'teacher'
-  | 'job_seeker'
-  | 'startup_founder'
-  | 'other';
+  | 'brand_shopify'
+  | 'brand_amazon'
+  | 'brand_retail'
+  | 'brand_startup'
+  | 'brand_agency'
+  | 'brand_other';
 
-export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced';
+export type ExperienceLevel =
+  | 'rev_early'
+  | 'rev_growing'
+  | 'rev_scale'
+  | 'rev_enterprise';
 
 export type Interest =
-  | 'ai_tools'
-  | 'prompt_engineering'
-  | 'ai_automation'
-  | 'ai_content_creation'
-  | 'ai_marketing'
-  | 'ai_development'
-  | 'ai_agents'
-  | 'productivity_systems';
+  | 'service_perf_marketing'
+  | 'service_marketplace'
+  | 'service_shopify_dev'
+  | 'service_seo_organic'
+  | 'service_brand_creative'
+  | 'service_automation';
 
 export interface LeadFormData {
   fullName: string;
   email: string;
   phone: string;
+  companyName: string;
+  websiteUrl: string;
   occupation: Occupation | '';
   experienceLevel: ExperienceLevel | '';
   interests: Interest[];
@@ -58,6 +54,8 @@ export interface ValidationErrors {
   fullName?: string;
   email?: string;
   phone?: string;
+  companyName?: string;
+  websiteUrl?: string;
   occupation?: string;
   experienceLevel?: string;
   interests?: string;

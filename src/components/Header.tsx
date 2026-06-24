@@ -38,30 +38,8 @@ export default function Header({ onOpenAdmin, isAdminActive }: HeaderProps) {
           <FirstAiLogo size="md" />
         </div>
 
-        {/* Center: Navigation Menu (Home, Programs, Community) */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-mono tracking-widest text-[#A1A1AA]">
-          <a
-            href="#home"
-            className="hover:text-brand-yellow font-medium transition-colors relative py-1.5 group select-none"
-          >
-            HOME
-            <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-yellow transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a
-            href="#programs"
-            className="hover:text-brand-yellow font-medium transition-colors relative py-1.5 group select-none"
-          >
-            PROGRAMS
-            <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-yellow transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a
-            href="#community"
-            className="hover:text-brand-yellow font-medium transition-colors relative py-1.5 group select-none"
-          >
-            COMMUNITY
-            <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-yellow transition-all duration-300 group-hover:w-full" />
-          </a>
-        </nav>
+        {/* Center: Navigation Menu (Removed per user request) */}
+        <div className="hidden md:block" />
 
         {/* Right: Small Trust Badge & Admin Toggle */}
         <div className="flex items-center gap-3.5">
@@ -80,13 +58,13 @@ export default function Header({ onOpenAdmin, isAdminActive }: HeaderProps) {
             <span className="hidden sm:inline">{isAdminActive ? 'Lead Log' : 'Admin'}</span>
           </button>
 
-          {/* Premium Badge: ⭐ Trusted by 1000+ Learners */}
+          {/* Premium Badge: ⭐ Trusted by 100+ Brands */}
           <div
             id="trust_badge"
             className="flex items-center gap-2 px-4 py-1.5 bg-black/60 border border-brand-yellow/30 text-brand-yellow text-xs rounded-full font-medium tracking-wide shadow-[0_0_15px_rgba(255,196,0,0.08)] select-none"
           >
             <Sparkles className="w-3.5 h-3.5 fill-brand-yellow" />
-            <span className="font-semibold text-[11px] sm:text-xs">Trusted by 1000+ Learners</span>
+            <span className="font-semibold text-[11px] sm:text-xs">Trusted by 100+ Brands &amp; Retailers</span>
           </div>
         </div>
       </header>

@@ -211,7 +211,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
 
   // Filter and search computation
   const filteredLeads = leads.filter(lead => {
-    const searchString = `${lead.fullName} ${lead.email} ${lead.phone} ${lead.id}`.toLowerCase();
+    const searchString = `${lead.fullName} ${lead.email} ${lead.phone} ${lead.id} ${lead.companyName || ''} ${lead.websiteUrl || ''}`.toLowerCase();
     const matchesSearch = searchString.includes(searchQuery.toLowerCase());
     const matchesFilter = filterInterest === 'all' || lead.interests.includes(filterInterest as any);
     return matchesSearch && matchesFilter;
@@ -225,7 +225,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
           <div>
             <div className="flex items-center gap-2 text-brand-yellow font-mono text-sm mb-2">
               <Database className="w-4 h-4 animate-pulse" />
-              <span>FIRST AI LEAD REPOSITORY</span>
+              <span>FIRSTSIGHT B2B ENQUIRIES</span>
             </div>
             <h1 className="text-3xl font-display font-bold tracking-tight">Admin Control Dashboard</h1>
             <p className="text-gray-400 text-sm mt-1">
@@ -520,12 +520,13 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
               <h3 className="text-xs font-mono text-gray-400 mb-3.5 uppercase tracking-wider">Filter Interests</h3>
               <div className="space-y-2">
                 {[
-                  { id: 'all', label: 'All Learning Programs' },
-                  { id: 'ai_automation', label: 'AI Automation' },
-                  { id: 'prompt_engineering', label: 'Prompt Engineering' },
-                  { id: 'ai_agents', label: 'Autonomous AI Agents' },
-                  { id: 'ai_content_creation', label: 'Content Creation' },
-                  { id: 'productivity_systems', label: 'Productivity Systems' },
+                  { id: 'all', label: 'All Services' },
+                  { id: 'service_perf_marketing', label: 'Performance Marketing' },
+                  { id: 'service_marketplace', label: 'Marketplace Growth' },
+                  { id: 'service_shopify_dev', label: 'Shopify Store Development' },
+                  { id: 'service_seo_organic', label: 'SEO & Organic Growth' },
+                  { id: 'service_brand_creative', label: 'Creative & Video Ads' },
+                  { id: 'service_automation', label: 'Marketing Automation' },
                 ].map(item => (
                   <button
                     key={item.id}
@@ -579,9 +580,10 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                   <thead>
                     <tr className="border-b border-white/10 text-[10px] font-mono text-gray-400 uppercase tracking-wider pb-3">
                       <th className="py-3 px-2 font-semibold">Ref ID &amp; Timestamp</th>
-                      <th className="py-3 px-2 font-semibold">Lead Details</th>
-                      <th className="py-3 px-2 font-semibold">Profile &amp; Level</th>
-                      <th className="py-3 px-2 font-semibold">Interests Selected</th>
+                      <th className="py-3 px-2 font-semibold">Contact Details</th>
+                      <th className="py-3 px-2 font-semibold">Brand &amp; Website</th>
+                      <th className="py-3 px-2 font-semibold">Channel &amp; Revenue</th>
+                      <th className="py-3 px-2 font-semibold">Services Requested</th>
                       <th className="py-3 px-2 text-right font-semibold">Actions</th>
                     </tr>
                   </thead>
@@ -607,20 +609,37 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                           </span>
                         </td>
 
-                        {/* Name, Email, Phone */}
+                        {/* Contact Person Name, Email, Phone */}
                         <td className="py-4 px-2">
                           <span className="font-semibold text-white block">{lead.fullName}</span>
                           <span className="text-gray-400 block mt-0.5">{lead.email}</span>
                           <span className="text-gray-500 text-[11px] block mt-0.5 font-mono">{lead.phone}</span>
                         </td>
 
-                        {/* Occupation & Experience */}
+                        {/* Brand & Website URL */}
+                        <td className="py-4 px-2">
+                          <span className="font-semibold text-gray-200 block">{lead.companyName || 'Not Specified'}</span>
+                          {lead.websiteUrl ? (
+                            <a
+                              href={lead.websiteUrl.startsWith('http') ? lead.websiteUrl : `https://${lead.websiteUrl}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-brand-yellow/80 hover:text-brand-yellow hover:underline block mt-0.5 font-mono text-[11px] truncate max-w-[150px]"
+                            >
+                              {lead.websiteUrl}
+                            </a>
+                          ) : (
+                            <span className="text-gray-600 block mt-0.5 italic text-[11px]">No Website</span>
+                          )}
+                        </td>
+
+                        {/* Occupation & Experience (Channel & Revenue) */}
                         <td className="py-4 px-2">
                           <span className="px-2 py-0.5 rounded-full bg-white/10 text-gray-300 text-[10px] inline-block mb-1.5 font-medium">
                             {getOccupationLabel(lead.occupation)}
                           </span>
                           <span className="block text-[11px] text-gray-400">
-                            Exp: <strong className="text-gray-200">{getExperienceLabel(lead.experienceLevel)}</strong>
+                            Rev: <strong className="text-brand-yellow font-mono">{getExperienceLabel(lead.experienceLevel)}</strong>
                           </span>
                         </td>
 
@@ -632,7 +651,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                                 key={int}
                                 className="text-[9px] font-mono bg-amber-500/10 border border-amber-500/20 text-brand-yellow px-1.5 py-0.5 rounded"
                               >
-                                {int.replace('ai_', '').replace('_', ' ')}
+                                {getInterestLabel(int)}
                               </span>
                             ))}
                           </div>

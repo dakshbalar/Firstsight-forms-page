@@ -11,10 +11,9 @@ const WEBHOOK_STORAGE_KEY = 'first_ai_webhook_settings';
 // Generate dynamic Reference ID like FAI-2026-001284
 export function generateReferenceId(existingCount: number): string {
   const currentYear = new Date().getFullYear();
-  // We can pad with leading zeros, start counter around 1284 or generate a elegant number based on index
   const baseCounter = 1284 + existingCount;
   const paddedCounter = String(baseCounter).padStart(6, '0');
-  return `FAI-${currentYear}-${paddedCounter}`;
+  return `FS-${currentYear}-${paddedCounter}`;
 }
 
 // Get all submissions from localStorage
@@ -22,36 +21,42 @@ export function getStoredLeads(): LeadSubmission[] {
   try {
     const rawData = localStorage.getItem(LEADS_STORAGE_KEY);
     if (!rawData) {
-      // Seed some beautiful, high-fidelity mock entries if empty, so the admin preview looks active and real!
+      // Seed B2B e-commerce growth partner mock entries if empty
       const initialSeed: LeadSubmission[] = [
         {
-          id: 'FAI-2026-001280',
+          id: 'FS-2026-001280',
           fullName: 'Sarah Jenkins',
-          email: 'sarah.j@techstart.io',
-          phone: '+1 (555) 019-2834',
-          occupation: 'working_professional',
-          experienceLevel: 'intermediate',
-          interests: ['ai_automation', 'prompt_engineering', 'ai_agents'],
+          email: 'sarah.j@snackbyte.com',
+          phone: '+91 98765 43210',
+          companyName: 'SnackByte Foods',
+          websiteUrl: 'snackbyte.co',
+          occupation: 'brand_shopify',
+          experienceLevel: 'rev_growing',
+          interests: ['service_perf_marketing', 'service_automation'],
           timestamp: '2026-06-21T10:14:32.000Z',
         },
         {
-          id: 'FAI-2026-001281',
+          id: 'FS-2026-001281',
           fullName: 'Marcus Chen',
-          email: 'm.chen@creative-studio.com',
-          phone: '+1 (555) 014-9921',
-          occupation: 'business_owner',
-          experienceLevel: 'beginner',
-          interests: ['ai_content_creation', 'ai_marketing', 'productivity_systems'],
+          email: 'm.chen@aurajewels.in',
+          phone: '+91 91234 56789',
+          companyName: 'Aura Premium Jewels',
+          websiteUrl: 'aurajewels.in',
+          occupation: 'brand_amazon',
+          experienceLevel: 'rev_scale',
+          interests: ['service_marketplace', 'service_brand_creative'],
           timestamp: '2026-06-22T14:45:10.000Z',
         },
         {
-          id: 'FAI-2026-001282',
-          fullName: 'Elena Rostova',
-          email: 'elena.rostov@edu.org',
-          phone: '+1 (555) 017-4830',
-          occupation: 'student',
-          experienceLevel: 'advanced',
-          interests: ['ai_tools', 'ai_development', 'prompt_engineering'],
+          id: 'FS-2026-001282',
+          fullName: 'Rajesh Mehta',
+          email: 'rajesh@mehtahomeware.com',
+          phone: '+91 98222 33344',
+          companyName: 'Mehta Homeware',
+          websiteUrl: 'mehtahomeware.com',
+          occupation: 'brand_retail',
+          experienceLevel: 'rev_enterprise',
+          interests: ['service_shopify_dev', 'service_seo_organic', 'service_perf_marketing'],
           timestamp: '2026-06-23T09:30:15.000Z',
         },
       ];
@@ -73,14 +78,14 @@ export async function addLeadSubmission(formData: LeadFormData): Promise<LeadSub
   // Parse UTM values from current window URL
   let utmSource = 'direct';
   let utmMedium = 'web';
-  let utmCampaign = 'first_sight_luxury';
+  let utmCampaign = 'firstsight_b2b_growth';
 
   if (typeof window !== 'undefined') {
     try {
       const params = new URLSearchParams(window.location.search);
       utmSource = params.get('utm_source') || 'direct';
       utmMedium = params.get('utm_medium') || 'web';
-      utmCampaign = params.get('utm_campaign') || 'first_sight_luxury';
+      utmCampaign = params.get('utm_campaign') || 'firstsight_b2b_growth';
     } catch (e) {
       console.error('Error parsing UTM values:', e);
     }
@@ -98,24 +103,23 @@ export async function addLeadSubmission(formData: LeadFormData): Promise<LeadSub
   const updatedLeads = [newSubmission, ...existingLeads];
   localStorage.setItem(LEADS_STORAGE_KEY, JSON.stringify(updatedLeads));
 
-  // Trigger real Webhook if enabled and URL is provided
+  // Trigger Webhook if enabled
   const webhookSettings = getWebhookSettings();
   if (webhookSettings.isEnabled && webhookSettings.url) {
     try {
-      // Map keys to premium human-readable Google Sheets friendly keys
       const payload = {
         Timestamp: newSubmission.timestamp,
         'Reference ID': newSubmission.id,
         'Full Name': newSubmission.fullName,
         Email: newSubmission.email,
         Phone: newSubmission.phone,
-        Occupation: getOccupationLabel(newSubmission.occupation),
-        Experience: getExperienceLabel(newSubmission.experienceLevel),
-        Interests: newSubmission.interests.map(getInterestLabel).join(', '),
+        'Company Name': newSubmission.companyName,
+        'Website URL': newSubmission.websiteUrl,
+        'Sales Channel': getOccupationLabel(newSubmission.occupation),
+        'Monthly Revenue': getExperienceLabel(newSubmission.experienceLevel),
+        'Services Needed': newSubmission.interests.map(getInterestLabel).join(', '),
       };
 
-      // Since we are inside client side iframe, we perform a non-blocking fetch
-      // Mode 'no-cors' allows sending to arbitrary endpoints like Google Apps Script without failing on CORS
       await fetch(webhookSettings.url, {
         method: 'POST',
         headers: {
@@ -158,34 +162,18 @@ export function saveWebhookSettings(settings: WebhookSettings): void {
 // Labels formatting helper
 export function getOccupationLabel(value: string): string {
   switch (value) {
-    case 'student':
-      return 'Student';
-    case 'working_professional':
-      return 'Working Professional';
-    case 'freelancer':
-      return 'Freelancer';
-    case 'business_owner':
-      return 'Business Owner';
-    case 'marketing_professional':
-      return 'Marketing Professional';
-    case 'designer':
-      return 'Designer';
-    case 'developer':
-      return 'Developer';
-    case 'ai_enthusiast':
-      return 'AI Enthusiast';
-    case 'content_creator':
-      return 'Content Creator';
-    case 'sales_professional':
-      return 'Sales Professional';
-    case 'teacher':
-      return 'Teacher';
-    case 'job_seeker':
-      return 'Job Seeker';
-    case 'startup_founder':
-      return 'Startup Founder';
-    case 'other':
-      return 'Other';
+    case 'brand_shopify':
+      return 'D2C Brand (Shopify/Woo)';
+    case 'brand_amazon':
+      return 'Marketplace Seller (Amazon/Flipkart)';
+    case 'brand_retail':
+      return 'Retail / Offline Brand';
+    case 'brand_startup':
+      return 'Pre-launch Brand';
+    case 'brand_agency':
+      return 'Agency Partner';
+    case 'brand_other':
+      return 'Other Business Model';
     default:
       return value || 'Not Specified';
   }
@@ -193,12 +181,14 @@ export function getOccupationLabel(value: string): string {
 
 export function getExperienceLabel(value: string): string {
   switch (value) {
-    case 'beginner':
-      return 'Beginner (0-1 yrs)';
-    case 'intermediate':
-      return 'Intermediate (1-3 yrs)';
-    case 'advanced':
-      return 'Advanced (3+ yrs)';
+    case 'rev_early':
+      return 'Early Stage (< ₹5 Lakhs /mo)';
+    case 'rev_growing':
+      return 'Growing (₹5 - ₹20 Lakhs /mo)';
+    case 'rev_scale':
+      return 'Established (₹20 - ₹50 Lakhs /mo)';
+    case 'rev_enterprise':
+      return 'Enterprise (₹50 Lakhs+ /mo)';
     default:
       return value || 'Not Specified';
   }
@@ -206,22 +196,18 @@ export function getExperienceLabel(value: string): string {
 
 export function getInterestLabel(value: string): string {
   switch (value) {
-    case 'ai_tools':
-      return 'AI Tools Explorer';
-    case 'prompt_engineering':
-      return 'Prompt Engineering';
-    case 'ai_automation':
-      return 'AI Workflow Automation';
-    case 'ai_content_creation':
-      return 'AI Content Creation';
-    case 'ai_marketing':
-      return 'AI Growth Marketing';
-    case 'ai_development':
-      return 'AI Development & Coding';
-    case 'ai_agents':
-      return 'Autonomous AI Agents';
-    case 'productivity_systems':
-      return 'Productivity Systems';
+    case 'service_perf_marketing':
+      return 'Performance Marketing';
+    case 'service_marketplace':
+      return 'Marketplace Growth';
+    case 'service_shopify_dev':
+      return 'Shopify Store Development';
+    case 'service_seo_organic':
+      return 'SEO & Organic Growth';
+    case 'service_brand_creative':
+      return 'Creative & Video Ads';
+    case 'service_automation':
+      return 'Marketing & Retention Automation';
     default:
       return value;
   }
@@ -229,13 +215,15 @@ export function getInterestLabel(value: string): string {
 
 // Convert leads array to CSV string
 export function exportToCSV(leads: LeadSubmission[]): string {
-  const headers = ['Timestamp', 'Reference ID', 'Full Name', 'Email', 'Phone', 'Occupation', 'Experience Level', 'Learning Interests'];
+  const headers = ['Timestamp', 'Reference ID', 'Contact Name', 'Email', 'Phone', 'Company Name', 'Website', 'Business Type', 'Monthly Revenue', 'Services Needed'];
   const rows = leads.map(lead => [
     lead.timestamp,
     lead.id,
     `"${lead.fullName.replace(/"/g, '""')}"`,
     lead.email,
     lead.phone,
+    `"${lead.companyName.replace(/"/g, '""')}"`,
+    `"${lead.websiteUrl.replace(/"/g, '""')}"`,
     getOccupationLabel(lead.occupation),
     getExperienceLabel(lead.experienceLevel),
     `"${lead.interests.map(getInterestLabel).join(', ').replace(/"/g, '""')}"`,
